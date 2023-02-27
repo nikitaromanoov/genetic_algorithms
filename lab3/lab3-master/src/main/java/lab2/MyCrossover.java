@@ -25,11 +25,6 @@ public class MyCrossover extends AbstractCrossover<double[]> {
             }
         }
 
-        //double[] child = new double[p1.length];
-        //for (int j = 0; j < p1.length; j++) {
-        //    child[j] = (p1[j] +p2[j] ) * 0.5;
-        //}
-        // your implementation:
         children.add(child);
         children.add(p1);
         children.add(p2);
