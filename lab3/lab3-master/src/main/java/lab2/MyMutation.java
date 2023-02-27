@@ -17,8 +17,6 @@ public class MyMutation implements EvolutionaryOperator<double[]> {
             double[] news = population.get(index);
             for (int j = 0; j < Math.floor(news.length/8); j++) {
                 int randomNum = ThreadLocalRandom.current().nextInt(0, news.length);
-                // System.out.println(randomNum);
-                //news[randomNum] = ThreadLocalRandom.current().nextDouble(-5, 5);
                 double change = ThreadLocalRandom.current().nextDouble(-0.5, 0.5);
                 if (news[randomNum] + change > 5) {
                     news[randomNum] = 5;
@@ -29,7 +27,6 @@ public class MyMutation implements EvolutionaryOperator<double[]> {
                 }
             }
             population.set(index, news);
-            //System.out.println(Arrays.toString(news));
         }
         for (int i = 0; i < Math.floor(population.size()/16); i++) {
             int index = ThreadLocalRandom.current().nextInt(0, population.size());
