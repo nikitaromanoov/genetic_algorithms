@@ -58,7 +58,7 @@ best_ever = 10000000
 elitism = 20 
 ```
 
-В следующем локе кода мы начианем итерацию по поколениям GENERATIONS раз. Если это 1 поколение, то мы используем функцию  factory для создания 
+В следующем локе кода мы начианем итерацию по поколениям GENERATIONS раз. Если это 1 поколение, то мы используем функцию  factory для создания нулевого поколоения.
 ```python3
 population = []
 for i in range(GENERATIONS):
@@ -66,9 +66,42 @@ for i in range(GENERATIONS):
   if population == []:
     for j in range(POPULATIONS_SIZE):
       population += [factory(COUNT_CITIES)]
-  # crossover
+```
+Далее мы реализуем элитизм. Элитизм подразумевает, что одна или несколько особей текущего поколения переходят в следующее, не подвергаясь каким-либо изменениям, в отличие от всех остальных особей. Обычно в качестве элитной особи выбирается особь с наилучшим значением целевой функции, что и было реализовано.
+
+```python3
+# elitism
+new_population = []
+df = pd.DataFrame({"individ":population, "score": [fintess_function(i, dict_cities) for i in population]})
+df = df.sort_values("score")
+base = list(df["individ"][:ELETISM])
 ```
 
+```python3
+# crossover
+for j in range(round(PRECENT_CROSSOVER*round(POPULATIONS_SIZE/2))):
+  new_population += [crossover(selectOne(df),selectOne(df))]
+population += new_population
+```
+
+
+```python3
+#mutation
+random.shuffle(population)
+population = mutation(population, SWAP_MUTATION, INSERT_MUTATION, SCRAMBLE_MUTATION, INVERSION_MUTATION)
+```
+
+```python3
+#selection
+population, best_score = selection(population, POPULATIONS_SIZE- ELETISM)
+population = base + population
+```
+
+```
+if best_score < best_ever:
+  best_ever = best_score
+print(f"Generation #{i}, best_score_ever = {best_ever}, best_current_score = {best_score}")
+```
 
 ### Ответы на вопросы
 
