@@ -35,9 +35,76 @@
 
 
 #### def selectOne(population)
+Это реализация Roulette-wheel selection, которая используется для выбора особей для воспроизведения потомства. В основе идеи метода лежит представление популяции в виде колеса рулетки, где для каждой особи имеется сектор, размер которого пропорционален значению её показателя приспособленности. Но так как мы стремимся к минимизации значений, поскольку они представляют количество конфликтов, и мы хотим получить их как можно меньше, а именно ноль, чтобы решить задачу. Поэтому поделим 1 на все соответсвующие значения для того, чтобы выбирались чаще те значения, которые имеют меньшее значение оценки фитнесс-функции.
 
 ### Эксперимент
 
+
+
+#### Реализация
+
+Далее в ячейки кода были собраны все ранее описанные функции для полноценной реализации генетического алгоритма. Рассмотрим более детально и построчно как все работает.
+
+В блоке ниже определяются основные параметры.
+
+```python3
+GENERATIONS = 100000
+POPULATIONS_SIZE = 300
+SIZE = 256
+PRECENT_CROSSOVER = 0.9
+best_ever = 10000000
+ELETISM = 30
+COUNT_MUTATION = 30
+```
+
+В следующем блоке кода мы начинаем итерацию по поколениям GENERATIONS раз. Если это 1 поколение, то мы используем функцию  factory для создания нулевого поколения. Для этого подаем ей на вход размер проблемы - SIZE.
+```python3
+population = []
+for i in range(GENERATIONS):
+  #factor
+  if population == []:
+    for j in range(POPULATIONS_SIZE):
+      population += [factory(SIZE)]
+```
+Далее мы реализуем элитизм. Элитизм подразумевает, что одна или несколько особей текущего поколения переходят в следующее, не подвергаясь каким-либо изменениям, в отличие от всех остальных особей. Обычно в качестве элитной особи выбирается особь с наилучшим значением целевой функции, что и было реализовано.
+
+```python3
+ # elitism
+ new_population = []
+ df = pd.DataFrame({"individ":population, "score": [fintess_function(i) for i in population]})
+ df = df.sort_values("score")
+ base = list(df["individ"][:ELETISM])
+```
+
+В следующем блоке создается новое количество особей, равное  PRECENT_CROSSOVER*(POPULATIONS_SIZE/2).
+```python3
+# crossover
+for j in range(round(PRECENT_CROSSOVER*round(POPULATIONS_SIZE/2))):
+   new_population += [crossover(selectOne(df),selectOne(df))]
+population += new_population
+```
+Далее применяется мутация, задаваемая параметром COUNT_MUTATION.
+
+```python3
+#mutation
+random.shuffle(population)
+population = mutation(population, COUNT_MUTATION)
+```
+После этого проводится селекция, учитывающая тот факт, что был применен элитизм.
+```python3
+#selection
+population, best_score = selection(population, POPULATIONS_SIZE- ELETISM)
+population = base + population
+```
+В конце выводится номер поколения, лучшая особь в этом поколении, не считая элитарных, и лучшая особь существовавшая когда-либо. Если решение было найдено ( количество ошибок равно 0), то  выполнение генетического алгоритма прекращается
+```python3
+if best_score < best_ever:
+  best_ever = best_score
+
+print(f"Generation #{i}, best_score_ever = {best_ever}, best_current_score = {best_score}")
+  if best_score == 0:
+    break
+```
 
 
 
