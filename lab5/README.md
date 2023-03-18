@@ -80,7 +80,7 @@ for i in range(GENERATIONS):
 ```python3
 # crossover
 for j in range(round(PRECENT_CROSSOVER*round(POPULATIONS_SIZE/2))):
-   new_population += [crossover(selectOne(df),selectOne(df))]
+  new_population += [crossover(selectOne(df[~df.astype(str).duplicated()].reset_index()),selectOne(df))]
 population += new_population
 ```
 Далее применяется мутация, задаваемая параметром COUNT_MUTATION.
