@@ -9,7 +9,7 @@
 * Watchmaker framework версии 0.7.1.
 ## Ход работы
 
-Для работы используются разработки из лабораторной работы №2 : https://github.com/nikitaromanoov/genetic_algorithms/tree/main/lab2, а именно инициализация, кроссовер и мутация.
+Для работы используются разработки из лабораторной работы №3 : https://github.com/nikitaromanoov/genetic_algorithms/tree/main/lab2, а именно инициализация, кроссовер и мутация.
 Предположим, что размерность проблемы dimension = 50, а размер популяции 100.
 
 
